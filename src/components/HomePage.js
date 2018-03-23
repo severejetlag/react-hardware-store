@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import AdminView from './AdminView'
+import ShopView from './ShopView'
 
 class HomePage extends Component {
   state = {
     itemCurrentlyOnSale: 'A Hammer',
-    editSaleItem: true,
+    editSaleItem: false,
+    showAdminView: false,
     productList: [
       {
         productName: 'Hammer',
@@ -15,12 +17,18 @@ class HomePage extends Component {
         productName: 'Nail',
         description: 'Itsa nail',
         price: 0.12,
-    }
-  ]};
+      }
+    ]
+  };
 
   toggleEditSaleButton = () => {
     const editSaleItem = !this.state.editSaleItem
     this.setState({editSaleItem})
+  }
+
+  toggleShowAdmin = () => {
+    const showAdminView = !this.state.showAdminView
+    this.setState({showAdminView})
   }
 
   updateSaleItem = (event) => {
@@ -29,11 +37,24 @@ class HomePage extends Component {
   }
 
   addNewProductToProductList = (newProduct) => {
-      const productList = [...this.state.productList];
-      productList.push(newProduct);
-      this.setState({productList});
+    const productList = [...this.state.productList];
+    productList.push(newProduct);
+    this.setState({productList});
   };
+
+  deleteProduct = (event, index) => {
+    const productList = [...this.state.productList]
+    productList.splice(index, 1)
+    this.setState({productList})
+  }
   render() {
+    const shopView = <ShopView productList={this.state.productList}/>
+    const adminView = <AdminView
+      productList={this.state.productList}
+      addNewProductToProductList={this.addNewProductToProductList}
+      deleteProduct={this.deleteProduct}
+      showAdminView={this.state.showAdminView}/>
+
     return (
       <div>
         <h1>My Hardware Store</h1>
@@ -55,15 +76,24 @@ class HomePage extends Component {
               </div>
               : null
             }
-        </div>
-        <article>
-          <AdminView
-            productList={this.state.productList} 
-            addNewProductToProductList={this.addNewProductToProductList}/>
-        </article>
-      </div>
-    );
-  }
-}
+          </div>
+          <article>
+            <button onClick={this.toggleShowAdmin}>
+              {
+                  this.state.showAdminView ?
+                  'Hide Admin View'
+                  : 'Show Admin View'
+              }
+            </button>
+            {
+              this.state.showAdminView ?
+              adminView :
+              shopView
+            }
+            </article>
+          </div>
+        );
+      }
+    }
 
-export default HomePage;
+    export default HomePage;

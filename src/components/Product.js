@@ -1,19 +1,22 @@
 import React, {Component} from 'react';
 
-class Product extends Component {
-  render() {
-    const productName = this.props.productName;
-    const description = this.props.description;
-    const price = this.props.price;
+const Product = props => {
 
     return (
         <div>
-          <h3>{productName}</h3>
-          <div>{description}</div>
-          <div>{price}</div>
+          <h3>{props.productName}</h3>
+          <div>{props.description}</div>
+          <div>{props.price}</div>
+          {
+            props.showAdminView ?
+            <button onClick={() => props.deleteProduct( props.index)}>
+              Delete Product
+            </button>
+            : ""
+          }
         </div>
     );
-  }
+
 }
 
 export default Product;
